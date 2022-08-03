@@ -271,7 +271,7 @@ public class SocialSharing extends CordovaPlugin {
         final boolean hasMultipleAttachments = files.length() > 1;
         final Intent sendIntent = new Intent(hasMultipleAttachments ? Intent.ACTION_SEND_MULTIPLE : Intent.ACTION_SEND);
         final Intent receiverIntent = new Intent(cordova.getActivity().getApplicationContext(), ShareChooserPendingIntent.class);
-         PendingIntent pendingIntent = null;
+        final PendingIntent pendingIntent = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
               pendingIntent = PendingIntent.getBroadcast(cordova.getActivity().getApplicationContext(), 0, receiverIntent, PendingIntent.FLAG_MUTABLE);
             } else {
@@ -375,12 +375,13 @@ public class SocialSharing extends CordovaPlugin {
           } else {
             // experimenting a bit
             // as an experiment for #300 we're explicitly running it on the ui thread here
+            final PendingIntent pendingIntent2 = pendingIntent;
             cordova.getActivity().runOnUiThread(new Runnable() {
               public void run() {
                 Intent chooseIntent;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
                   // Intent.createChooser's third param was only added in SDK version 22.
-                  chooseIntent = Intent.createChooser(sendIntent, chooserTitle, pendingIntent.getIntentSender());
+                  chooseIntent = Intent.createChooser(sendIntent, chooserTitle, pendingIntent2.getIntentSender());
                 } else {
                   chooseIntent = Intent.createChooser(sendIntent, chooserTitle);
                 }
